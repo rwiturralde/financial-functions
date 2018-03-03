@@ -39,7 +39,7 @@ def validate_event(event):
     else:
         error_message = "Missing required parameter(s). Event must contain fields for \'method\' and \'arguments\'"
         logger.error(error_message)
-        raise Exception(error_message)
+        raise TypeError(error_message)
 
 
 def lambda_handler(event, context):
