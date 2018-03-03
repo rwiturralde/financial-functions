@@ -33,7 +33,7 @@ def validate_event(event):
         if hasattr(numpy, numpy_method_name) and callable(getattr(numpy, numpy_method_name)):
             return
         else:
-            error_message = "Invalid NumPy method: {} or too few arguments".format(numpy_method_name)
+            error_message = "Invalid NumPy method: {}".format(numpy_method_name)
             logger.error(error_message)
             raise AttributeError(error_message)
     else:
