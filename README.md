@@ -2,10 +2,30 @@
 Simple [AWS Lambda](https://aws.amazon.com/lambda) function that wraps the popular python library, [NumPy](http://www.numpy.org/).
 
 ## Usage
+#### Input
+The AWS Lambda function event expects an JSON dictionary with two entries: 'method' and 'arguments'.
+* method - String - The name of the NumPy method to invoke
+* arguments - Array - An ordered array of arguments to pass to the method.
 
-The AWS Lambda function event expects two arguments: 'method' and 'arguments'.
-* method - String - The NumPy method to invoke
-* arguments - Array - An ordered array of arguments to pass to the method mentioned above.
+```json
+{
+  "method": "some_method",
+  "arguments": [
+    1,
+    2,
+    3
+  ]
+}
+```
+
+#### Output
+The return JSON dictionary will contain a single entry: 'result' holding the result of the computation. If an error occurs, the function will return the [AWS Lambda error object](https://docs.aws.amazon.com/lambda/latest/dg/python-exceptions.html).
+
+```json
+{
+  "result": 123.456
+}
+```
 
 ## Examples
 
