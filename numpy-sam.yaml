@@ -6,14 +6,13 @@ Description: 'Lambda wrapper for numpy'
 Resources:
 ##################################################################
 #
-#  Lambda function wrapping numpy
+#  Lambda function wrapping NumPy
 #
 ##################################################################
-  NumpyFunction:
+  NumpyWrapper:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: 'NumpyWrapper'
-      Description: 'Wrapping numpy'
+      Description: 'Wrapping NumPy'
       Handler: 'handler.lambda_handler'
       CodeUri: './code'
       Runtime: 'python2.7'
