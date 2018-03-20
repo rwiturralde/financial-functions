@@ -68,3 +68,21 @@ def test_xirr_dates_not_chronological_order():
         ff.xirr(
             [-100, 20],
             [date(2016, 4, 1), date(2016, 1, 1)])
+
+def test_effect():
+    assert ff.effect(.12, 12) == 0.12682503013196977
+    assert ff.effect(.10, 4) == 0.10381289062499954
+    assert ff.effect(.10, 2) == 0.10250000000000004
+    assert ff.effect(.025, 2) == 0.02515624999999999
+
+def test_nominal():
+    assert ff.nominal(.12, 12) == 0.11386551521499655
+    assert ff.nominal(.10, 4) == 0.09645475633778045
+    assert ff.nominal(.10, 2) == 0.09761769634030326
+    assert ff.nominal(.025, 12) == 0.02471803523811289
+
+def test_sln():
+    assert ff.sln(5000, 300, 10) == 470
+    assert ff.sln(10000, 1000, 5) == 1800
+    assert ff.sln(500, 100, 8) == 50
+    assert ff.sln(1200, 200, 6) == 166.66666666666666
