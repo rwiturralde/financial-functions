@@ -7,7 +7,7 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: 'lambda.pmt_handler'
-      CodeUri: './code'
+      CodeUri: '../code'
       Runtime: 'python2.7'
       Timeout: 30
       MemorySize: 256
