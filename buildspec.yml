@@ -1,16 +1,17 @@
 version: 0.1
 
+env:
+  variables:
+    SAM_TEMPLATES = $(ls ./templates)
+
 phases:
   install:
     commands:
       - pip install --upgrade -t './code/lib' -r requirements.txt
   build:
     commands:
-      - aws cloudformation package --template-file templates/${FINANCIAL_ABBREVIATION}.yaml --s3-bucket $S3_BUCKET --output-template-file packaged-${FINANCIAL_ABBREVIATION}.yaml
+      - echo $SAM_TEMPLATES
+      - for template in $(ls ./templates); do echo "Packaging ${template}..."; aws cloudformation package --template-file ${template} --s3-bucket $S3_BUCKET --output-template-file packaged-${template}; done
   post_build:
     commands:
-      - aws cloudformation deploy --template-file packaged-${FINANCIAL_ABBREVIATION}.yaml  --stack-name "${FINANCIAL_ABBREVIATION}FinancialFunction" --capabilities CAPABILITY_IAM --region us-east-1
-artifacts:
-  type: zip
-  files:
-    - packaged-${FINANCIAL_ABBREVIATION}.yaml
+      - for template in $(ls ./templates); do echo "Deploying ${template}..."; aws cloudformation deploy --template-file packaged-${template}  --stack-name "FinancialFunction-${template}" --capabilities CAPABILITY_IAM --region us-east-1
