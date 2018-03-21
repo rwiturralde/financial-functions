@@ -9,4 +9,4 @@ phases:
       - for template in $(ls ./templates); do echo "Packaging templates/${template}..."; aws cloudformation package --template-file templates/${template} --s3-bucket $S3_BUCKET --output-template-file packaged-${template}; done
   post_build:
     commands:
-      - for template in $(ls ./templates); do echo "Deploying templates/${template}..."; aws cloudformation deploy --template-file packaged-${template}  --stack-name "FinancialFunction-${template}" --capabilities CAPABILITY_IAM --region us-east-1
+      - for template in $(ls ./templates); do echo "Deploying templates/${template}..."; aws cloudformation deploy --template-file packaged-${template}  --stack-name "FinancialFunction-${template}" --capabilities CAPABILITY_IAM --region us-east-1; done
