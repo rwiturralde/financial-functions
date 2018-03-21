@@ -6,7 +6,7 @@ Resources:
   IRR:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: 'lambda.irr_handler'
+      Handler: 'lambda_handlers.irr_handler'
       CodeUri: '../code'
       Runtime: 'python2.7'
       Timeout: 30

@@ -6,7 +6,7 @@ Resources:
   NPER:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: 'lambda.nper_handler'
+      Handler: 'lambda_handlers.nper_handler'
       CodeUri: '../code'
       Runtime: 'python2.7'
       Timeout: 30

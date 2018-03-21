@@ -10,6 +10,12 @@ logger = log_helper.getLogger(__name__)
 
 
 def fv_handler(request, context):
+    """
+    Future Value calculation
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.fv_schema
 
     try:
@@ -24,6 +30,12 @@ def fv_handler(request, context):
 
 
 def pv_handler(request, context):
+    """
+    Present Value calculation
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.pv_schema
 
     try:
@@ -38,6 +50,12 @@ def pv_handler(request, context):
 
 
 def npv_handler(request, context):
+    """
+    Net Present Value of a cash flow series
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.npv_schema
 
     try:
@@ -52,6 +70,12 @@ def npv_handler(request, context):
 
 
 def pmt_handler(request, context):
+    """
+    Compute the payment against loan principal plus interest
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.pmt_schema
 
     try:
@@ -66,6 +90,12 @@ def pmt_handler(request, context):
 
 
 def ppmt_handler(request, context):
+    """
+    Compute the payment against loan principal
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.ppmt_schema
 
     try:
@@ -80,6 +110,12 @@ def ppmt_handler(request, context):
 
 
 def irr_handler(request, context):
+    """
+    Internal Rate of Return calculation.
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.irr_schema
 
     try:
@@ -94,6 +130,12 @@ def irr_handler(request, context):
 
 
 def mirr_handler(request, context):
+    """
+    Modified Internal Rate of Return calculation.
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.mirr_schema
 
     try:
@@ -108,6 +150,12 @@ def mirr_handler(request, context):
 
 
 def nper_handler(request, context):
+    """
+    Number of periodic payments required to pay off a loan.
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.nper_schema
 
     try:
@@ -122,6 +170,12 @@ def nper_handler(request, context):
 
 
 def rate_handler(request, context):
+    """
+    Rate of interest period.
+    :param request: Dict containing the parameters to pass to the formula.
+    :param context: Lambda execution context
+    :return: Dict with a 'result' entry containing the result of the calculation
+    """
     schema = schemas.rate_schema
 
     try:

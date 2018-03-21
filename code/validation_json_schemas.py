@@ -1,3 +1,5 @@
+# TODO validate type is in valid set of values for all below
+
 fv_schema = {
     "type": "object",
     "properties": {

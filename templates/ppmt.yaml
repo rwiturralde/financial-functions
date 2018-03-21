@@ -6,7 +6,7 @@ Resources:
   PPMT:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: 'lambda.ppmt_handler'
+      Handler: 'lambda_handlers.ppmt_handler'
       CodeUri: '../code'
       Runtime: 'python2.7'
       Timeout: 30
