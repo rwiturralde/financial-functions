@@ -2,7 +2,7 @@ version: 0.1
 
 env:
   variables:
-    SAM_TEMPLATES = $(ls ./templates)
+    SAM_TEMPLATES: $(ls ./templates)
 
 phases:
   install:
