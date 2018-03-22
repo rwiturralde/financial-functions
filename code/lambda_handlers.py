@@ -4,9 +4,37 @@ import log_helper
 sys.path.append('lib')
 import numpy
 from jsonschema import validate
+from jsonschema.exceptions import ValidationError
 import validation_json_schemas as schemas
 
 logger = log_helper.getLogger(__name__)
+
+
+def __validate_arguments(function_name, arguments_json, json_schema):
+    """
+    Validate the arguments in the provided JSON against the provided json schema
+    :param function_name:
+    :param arguments_json:
+    :param json_schema:
+    :return: Dict containing whether the provided json is valid and an error message if validation failed.
+    """
+    try:
+        validate(arguments_json, json_schema)
+        return {'isValid': True}
+    except ValidationError as err:
+        logger.error("Invalid {} request with args: {}. Exception: {}".format(function_name, arguments_json, err))
+        return {'isValid': False, 'error': err.message}
+
+
+def __call_numpy(method, args):
+    """
+    Call a NumPy method with a given set of arguments
+    :param method: NumPy method to call
+    :param args: Arguments for the provided NumPy method
+    :return: Result from NumPy
+    """
+    logger.info("Calling numpy.{} with args: {}".format(method, args))
+    return {'result': getattr(numpy, method)(*args)}
 
 
 def fv_handler(request, context):
@@ -16,17 +44,14 @@ def fv_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.fv_schema
+    logger.info("FV request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("FV request: {}".format(request))
-        args = [request['rate'], request['nper'], request['pmt'], request.get('pv', 0), request.get('type', 0)]
-        logger.info("Calling numpy.fv with args: {}".format(args))
-        return {'result': numpy.fv(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling FV request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('FV', request, schemas.fv_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+
+    args = [request['rate'], request['nper'], request.get('pmt', 0), request.get('pv', 0), request.get('type', 0)]
+    return __call_numpy('fv', args)
 
 
 def pv_handler(request, context):
@@ -36,17 +61,14 @@ def pv_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.pv_schema
+    logger.info("PV request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("PV request: {}".format(request))
-        args = [request['rate'], request['nper'], request['pmt'], request.get('fv', 0), request.get('type', 0)]
-        logger.info("Calling numpy.pv with args: {}".format(args))
-        return {'result': numpy.pv(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling PV request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('PV', request, schemas.pv_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+
+    args = [request['rate'], request['nper'], request.get('pmt', 0), request.get('fv', 0), request.get('type', 0)]
+    return __call_numpy('pv', args)
 
 
 def npv_handler(request, context):
@@ -56,17 +78,14 @@ def npv_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.npv_schema
+    logger.info("NPV request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("NPV request: {}".format(request))
-        args = [request['rate'], request['values']]
-        logger.info("Calling numpy.npv with args: {}".format(args))
-        return {'result': numpy.npv(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling NPV request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('NPV', request, schemas.npv_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+
+    args = [request['rate'], request['values']]
+    return __call_numpy('npv', args)
 
 
 def pmt_handler(request, context):
@@ -76,17 +95,14 @@ def pmt_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.pmt_schema
+    logger.info("PMT request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("PMT request: {}".format(request))
-        args = [request['rate'], request['nper'], request['pv'], request.get('fv', 0), request.get('type', 0)]
-        logger.info("Calling numpy.pmt with args: {}".format(args))
-        return {'result': numpy.pmt(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling PMT request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('PMT', request, schemas.pmt_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+
+    args = [request['rate'], request['nper'], request['pv'], request.get('fv', 0), request.get('type', 0)]
+    return __call_numpy('pmt', args)
 
 
 def ppmt_handler(request, context):
@@ -96,17 +112,14 @@ def ppmt_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.ppmt_schema
+    logger.info("PPMT request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("PPMT request: {}".format(request))
-        args = [request['rate'], request['per'], request['nper'], request['pv'], request.get('fv', 0), request.get('type', 0)]
-        logger.info("Calling numpy.ppmt with args: {}".format(args))
-        return {'result': numpy.ppmt(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling PPMT request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('PPMT', request, schemas.ppmt_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+
+    args = [request['rate'], request['per'], request['nper'], request['pv'], request.get('fv', 0), request.get('type', 0)]
+    return __call_numpy('ppmt', args)
 
 
 def irr_handler(request, context):
@@ -116,17 +129,21 @@ def irr_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.irr_schema
+    logger.info("IRR request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("IRR request: {}".format(request))
-        args = [request['values']]
-        logger.info("Calling numpy.irr with args: {}".format(args))
-        return {'result': numpy.irr(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling IRR request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('IRR', request, schemas.irr_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+    else:
+        # IRR requires at least one positive and one negative value
+        sorted_values = sorted(request.get('values'))
+        values_length = len(request.get('values'))
+        if sorted_values[0] > 0 or sorted_values[values_length - 1] <= 0:
+            return {'error': "IRR requires at least one positive and one negative value"}
+
+    args = [request['values']]
+    return __call_numpy('irr', args)
+
 
 
 def mirr_handler(request, context):
@@ -136,17 +153,20 @@ def mirr_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.mirr_schema
+    logger.info("MIRR request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("MIRR request: {}".format(request))
-        args = [request['values'], request['finance_rate'], request['reinvest_rate']]
-        logger.info("Calling numpy.mirr with args: {}".format(args))
-        return {'result': numpy.mirr(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling MIRR request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('MIRR', request, schemas.mirr_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+    else:
+        # MIRR requires at least one positive and one negative value
+        sorted_values = sorted(request.get('values'))
+        values_length = len(request.get('values'))
+        if sorted_values[0] > 0 or sorted_values[values_length - 1] <= 0:
+            return {'error': "MIRR requires at least one positive and one negative value"}
+
+    args = [request['values'], request['finance_rate'], request['reinvest_rate']]
+    return __call_numpy('mirr', args)
 
 
 def nper_handler(request, context):
@@ -156,17 +176,14 @@ def nper_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.nper_schema
+    logger.info("NPER request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("NPER request: {}".format(request))
-        args = [request['rate'], request['pmt'], request['pv'], request.get('fv', 0), request.get('type', 0)]
-        logger.info("Calling numpy.nper with args: {}".format(args))
-        return {'result': numpy.nper(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling NPER request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('NPER', request, schemas.nper_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+
+    args = [request['rate'], request.get('pmt', 0), request['pv'], request.get('fv', 0), request.get('type', 0)]
+    return __call_numpy('nper', args)
 
 
 def rate_handler(request, context):
@@ -176,15 +193,12 @@ def rate_handler(request, context):
     :param context: Lambda execution context
     :return: Dict with a 'result' entry containing the result of the calculation
     """
-    schema = schemas.rate_schema
+    logger.info("Rate request: {}".format(request))
 
-    try:
-        validate(request, schema)
-        logger.info("Rate request: {}".format(request))
-        args = [request['nper'], request['pmt'], request['pv'], request.get('fv', 0), request.get('type', 0), request.get('guess', 0.10)]
-        logger.info("Calling numpy.rate with args: {}".format(args))
-        return {'result': numpy.rate(*args)}
-    except Exception as ex:
-        logger.error("Encountered an error while handling RATE request with args: {}. Exception: {}".format(request, ex))
-        raise ex
+    validation_result = __validate_arguments('Rate', request, schemas.rate_schema)
+    if not validation_result.get('isValid'):
+        return {'error': validation_result.get('error')}
+
+    args = [request['nper'], request.get('pmt', 0), request['pv'], request.get('fv', 0), request.get('type', 0), request.get('guess', 0.10)]
+    return __call_numpy('rate', args)
 

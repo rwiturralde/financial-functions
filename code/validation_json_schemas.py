@@ -16,10 +16,19 @@ fv_schema = {
             "type": "number"
         },
         "type": {
-            "type": "number"
+            "type": "integer",
+            "enum": [0, 1]
         }
     },
-    "required": ["rate", "nper", "pmt", "pv"]
+    "anyOf": [
+        {
+            "required": ["rate", "nper", "pmt"]
+        },
+        {
+            "required": ["rate", "nper", "pv"]
+        }
+    ],
+    "additionalProperties": False
 }
 
 pv_schema = {
@@ -38,10 +47,19 @@ pv_schema = {
             "type": "number"
         },
         "type": {
-            "type": "number"
+            "type": "integer",
+            "enum": [0, 1]
         }
     },
-    "required": ["rate", "nper", "pmt", "fv"]
+    "anyOf": [
+        {
+            "required": ["rate", "nper", "pmt"]
+        },
+        {
+            "required": ["rate", "nper", "fv"]
+        }
+    ],
+    "additionalProperties": False
 }
 
 npv_schema = {
@@ -58,7 +76,8 @@ npv_schema = {
             }
         }
     },
-    "required": ["rate", "values"]
+    "required": ["rate", "values"],
+    "additionalProperties": False
 }
 
 pmt_schema = {
@@ -77,10 +96,12 @@ pmt_schema = {
             "type": "number"
         },
         "type": {
-            "type": "number"
+            "type": "integer",
+            "enum": [0, 1]
         }
     },
-    "required": ["rate", "nper", "pv"]
+    "required": ["rate", "nper", "pv"],
+    "additionalProperties": False
 }
 
 ppmt_schema = {
@@ -90,7 +111,8 @@ ppmt_schema = {
             "type": "number"
         },
         "per": {
-            "type": "number"
+            "type": "number",
+            "minimum": 1
         },
         "nper": {
             "type": "number"
@@ -102,10 +124,12 @@ ppmt_schema = {
             "type": "number"
         },
         "type": {
-            "type": "number"
+            "type": "integer",
+            "enum": [0, 1]
         }
     },
-    "required": ["rate", "per", "nper", "pv"]
+    "required": ["rate", "per", "nper", "pv"],
+    "additionalProperties": False
 }
 
 irr_schema = {
@@ -114,12 +138,13 @@ irr_schema = {
         "values": {
             "type": "array",
             "items": {
-                "type": "number",
-                "minItems": 1
-            }
+                "type": "number"
+            },
+            "minItems": 2
         }
     },
-    "required": ["values"]
+    "required": ["values"],
+    "additionalProperties": False
 }
 
 mirr_schema = {
@@ -128,9 +153,9 @@ mirr_schema = {
         "values": {
             "type": "array",
             "items": {
-                "type": "number",
-                "minItems": 1
-            }
+                "type": "number"
+            },
+            "minItems": 2
         },
         "finance_rate": {
             "type": "number"
@@ -139,7 +164,8 @@ mirr_schema = {
             "type": "number"
         }
     },
-    "required": ["values", "finance_rate", "reinvest_rate"]
+    "required": ["values", "finance_rate", "reinvest_rate"],
+    "additionalProperties": False
 }
 
 nper_schema = {
@@ -158,10 +184,19 @@ nper_schema = {
             "type": "number"
         },
         "type": {
-            "type": "number"
+            "type": "integer",
+            "enum": [0, 1]
         }
     },
-    "required": ["rate", "pmt", "pv"]
+    "anyOf": [
+        {
+            "required": ["rate", "pmt", "pv"]
+        },
+        {
+            "required": ["rate", "pv", "fv"]
+        }
+    ],
+    "additionalProperties": False
 }
 
 rate_schema = {
@@ -180,11 +215,20 @@ rate_schema = {
             "type": "number"
         },
         "type": {
-            "type": "number"
+            "type": "integer",
+            "enum": [0, 1]
         },
         "guess": {
             "type": "number"
         }
     },
-    "required": ["nper", "pmt", "pv", "fv"]
+    "anyOf": [
+        {
+            "required": ["nper", "pmt", "pv"]
+        },
+        {
+            "required": ["nper", "pv", "fv"]
+        }
+    ],
+    "additionalProperties": False
 }
