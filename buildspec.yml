@@ -2,8 +2,8 @@ version: 0.1
 
 env:
   variables:
-    "TEMPLATES_DIR_PATH": "./templates"
-    "DIST_DIR_NAME": "dist"
+    TEMPLATES_DIR_PATH: "./templates"
+    DIST_DIR_NAME: "dist"
 
 phases:
   install:
