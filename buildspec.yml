@@ -11,6 +11,7 @@ phases:
       - pip install --upgrade -t './code/lib' -r requirements.txt
   pre_build:
     commands:
+      - env
       - mkdir $DIST_DIR_NAME
   build:
     commands:
